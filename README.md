@@ -5,8 +5,6 @@ Format SD card using [Raspberry Pi Imager](https://www.raspberrypi.com/software/
 
 This guide uses a raspberry pi 5, and the 64-bit OS.
 
-## Change device ID
-Go to Raspberry Pi COnfiguration and provide a unique username when prompted. *NB user names should be labeled in a repeatable way (e.g., 'osmia1', 'osmia2') to easily associated with physical units. The user name will be saved in output files.
 
 ## Pi Connect
 Click this:
