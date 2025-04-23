@@ -2,8 +2,6 @@ import os
 from datetime import datetime
 import subprocess
 
-start_t = 0
-end_t = 24
 duration = 580000  # Recording duration in milliseconds
 
 main = '/mnt/RNAiCam/RNAiVIDS'
