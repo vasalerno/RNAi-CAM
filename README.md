@@ -5,19 +5,16 @@ Format SD card using [Raspberry Pi Imager](https://www.raspberrypi.com/software/
 
 This guide uses a raspberry pi 5, and the 64-bit OS.
 
-
 ## Pi Connect
-Click this:
-![button in menu](guideImages/piConnect.jpg)
+Click the Raspberry Pi Connect button on the top right hand corner of the Pi Screen (it is a circle with two squares in the circle line)
 Input the hostname of the pi as the name of your device when prompted.
 
 Choose 'Turn On Raspberry Pi Connect'. The browser will open. Sign in, using the username of the pi as the device name.
 
 You will now be able to connect to the raspberry pi here: [https://connect.raspberrypi.com/devices](https://connect.raspberrypi.com/devices)
 
-## Connecting cameras
-The nest camera should be connected as camera 0 and the external camera should be camera 1. The positions are indicated by CAM/DISP 0 and CAM/DISP 1 on the board of the raspberry pi:
-![Camera connections](guideImages/camera.jpg)
+## Connecting the camera
+The camera should be connected as camera 0 (CAM/DISP 0). The positions are indicated by CAM/DISP 0 and CAM/DISP 1 on the board of the raspberry pi. 
 
 ## Check mounting location of external hard drive
 run the following in terminal:
@@ -29,10 +26,7 @@ Hard drives must be mounted at sda1. Do not connect other hard drives to pi.
 
 ## Preview camera (to test focus, framing, etc)
 ```bash
-rpicam-hello -t 0 --camera 0 #you should see the nest
-```
-```bash
-rpicam-hello -t 0 --camera 1 #you should see the outside
+rpicam-hello -t 0 --camera 0 #you should see the camera feed.
 ```
 
 ## Take a single full resolution photo
@@ -102,14 +96,20 @@ Then add the following lines to the bottom of the crontab file if they're not th
 ```
 After adding the lines, ctl+s will save. Then use ctl+x to leave.
 
-*NB if you want to use the camera (e.g, for preview, check focus, or to troubleshoot record.py script), turn off autoamted recording by commenting out that last line
+*NB if you want to use the camera (e.g, for preview, check focus, or to troubleshoot record.py script), turn off autoamted recording by commenting out that last line. To comment out the lines it should look like this
+#@reboot sudo systemctl daemon-reload
+#@reboot sudo mount /dev/sda1 /mnt/RNAi-CAM -o umask=000
+#@reboot sudo chmod 777 /mnt/RNAi-CAM
+#*/10 * * * * /usr/bin/python Recording.py
 
-Restart computer after updating crontab. osmiaCAM should run automatically after this.
+To turn back on the recording, you will need to get rid of the "#" in each line.
+
+Restart computer after updating crontab. RNAiCAM should run automatically after this.
 ```bash
 sudo reboot -h now
 ```
 
-## Lighting
+## Lighting - THIS WILL BE FOR FUTURE (NOT APPLICABLE AS OF 04/23/2025) -
 In order to use the relay module to control the lights automatically, the raspberry pi, relay, and lights must be connected properly. The images below illustrate pin/wire locations on the raspberry pi and relay module. To insert wires to the relay, use a screwdriver.
 
 ![Connection from raspberry pi to relay: pins must be connected properly](guideImages/lightsOverview.jpg)
@@ -132,11 +132,10 @@ While deploying, it is advisable to check the focus of the camera and adjust as 
 ```bash
 crontab -e
 ```
-Now comment out the lines that refer to dayShift and nightShift scripts. It should look like this:
+Now comment out the lines that refer to the Recording Scipt as seen above.
 
 
-Remember to uncomment these lines before actually deploying the unit. Note also that nightShift runs at startup and will put the unit to sleep after 10 seconds. If a unit must be deployed at night, edit the crontab during the day ahead of time.
-
+Remember to uncomment these lines before actually deploying the unit. 
 ## Check videos
 Videos are recorded as .h264s, which are great for file sizes but a bit cumbersome to convert and view. We have written some utility functions to help out with this. 
 First, for the nest and outside videos, a single frame from each video is now output automatically to check framing, etc
